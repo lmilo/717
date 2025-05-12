@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/detalles.css' %}">
+{% endblock %}
+
+{% block titulo %}Detalles del Producto{% endblock %}
+
+{% block cuerpo %}
+{% if messages %}
+    {% for message in messages %}
+        <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" style="text-align: left; list-style: none;">
+            <li>{{ message }}</li>
+        </ul>
+    {% endfor %}
+{% endif %}
+    <main class="product-details-container">
+        <div class="product-details">
+            <div class="product-image">
+                <img src="{{ producto.foto.url }}" alt="{{ producto.nombre }}" id="productImage">
+            </div>
+            <div class="product-info">
+                <h1 style="align-self: start;" id="productName">{{ producto.nombre }}</h1>
+                <p style="align-self: start; margin-top: -10px; font-size: 20px;" id="productPrice">${{ producto.precio|intcomma }}</p>
+
+                <form id="carritoForm" method="post" action="{% url 'agregar_al_carrito' producto.id %}">
+                    {% csrf_token %}
+                    {% if producto.tipo == 1 %}
+                        <div class="size-options">
+                            <button type="button" class="size-btn" data-size="S">S</button>
+                            <button type="button" class="size-btn" data-size="M">M</button>
+                            <button type="button" class="size-btn" data-size="L">L</button>
+                            <button type="button" class="size-btn" data-size="XL">XL</button>
+                            <button type="button" class="size-btn" data-size="XXL">XXL</button>
+                        </div>
+                    {% elif producto.tipo == 2 %}
+                        {% if producto.gen == 1 %}
+                            <div class="size-options">
+                                <button type="button" class="size-btn" data-size="S">28</button>
+                                <button type="button" class="size-btn" data-size="M">30</button>
+                                <button type="button" class="size-btn" data-size="L">32</button>
+                                <button type="button" class="size-btn" data-size="XL">34</button>
+                                <button type="button" class="size-btn" data-size="XXL">36</button>
+                                <button type="button" class="size-btn" data-size="XXXL">38</button>
+                            </div>
+                        {% elif producto.gen == 2 %}
+                            <div class="size-options">
+                                <button type="button" class="size-btn" data-size="S">6</button>
+                                <button type="button" class="size-btn" data-size="M">8</button>
+                                <button type="button" class="size-btn" data-size="L">10</button>
+                                <button type="button" class="size-btn" data-size="XL">12</button>
+                                <button type="button" class="size-btn" data-size="XXL">14</button>
+                                <button type="button" class="size-btn" data-size="XXL">16</button>                            
+                            </div>
+                        {% endif %}
+                    {% elif producto.tipo == 3 %}
+                        <div class="size-options">
+                            <button type="button" class="size-btn" data-size="S">7</button>
+                            <button type="button" class="size-btn" data-size="M">7<sup>1⁄4</sup></button>
+                            <button type="button" class="size-btn" data-size="L">7<sup>1/2</sup></button>
+                            <button type="button" class="size-btn" data-size="XL">7<sup>3/4</sup></button>
+                            <button type="button" class="size-btn" data-size="XXL">8</button>
+                            <button type="button" class="size-btn" data-size="XL">8<sup>1/4</sup></button>
+                        </div>
+                    {% endif %}                    
+                    <input type="hidden" name="talla" id="selected-size">
+                    {% if producto.cantidad == 0 %}
+                        <button class="add-to-cart">Agotado</button>                         
+                    {% else %}
+                        <button type="submit" class="add-to-cart">Agregar a la bolsa</button>
+                    {% endif %}
+                    
+                </form>
+
+                <div class="product-description" id="productDescription">
+                    <p>{{ producto.descripcion }}</p>
+                
+                    <img src="{% static 'img/lavado.png' %}" alt="lavado" width="180" height="13" style="margin-top: -35px;">
+                    <div>
+                        <p style="margin-top: -5px; font-size: 12px;">Empaque: Caja premium con diseño exclusivo, certificado de autenticidad y papel de seda personalizado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", function () {
+            const sizeButtons = document.querySelectorAll(".size-btn");
+            const sizeInput = document.getElementById("selected-size");
+        
+            sizeButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    // Quitar la clase 'selected' de todos los botones
+                    sizeButtons.forEach(btn => btn.classList.remove("selected"));
+        
+                    // Agregar la clase 'selected' al botón actual
+                    this.classList.add("selected");
+        
+                    // Actualizar el valor del input oculto
+                    sizeInput.value = this.getAttribute("data-size");
+                });
+            });
+        });
+        
+        
+    </script>
+{% endblock %}

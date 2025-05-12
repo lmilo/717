@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load humanize %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/productos.css' %}">
+{% endblock %}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block cuerpo %}
+{% if messages  %}
+    {% for message in messages %}
+        <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert" style="text-align: left; list-style: none;">
+            <li>{{ message }}</li>  
+        </ul>
+    {% endfor %}
+{% endif %}
+<main>
+    <div class="slider">
+        <div class="slide-container">
+            <img src="{% static 'img/Misca_Con_Diseño.jpg' %}" alt="photo 1" class="slide active">
+            <img src="{% static 'img/Misca_Con_Logo.jpg'%}" alt="photo 2" class="slide">
+            <img src="{% static 'img/Misca_Con_Nombre.jpg' %}" alt="photo 3" class="slide">
+        </div>
+        <div class="slider-nav"></div>
+    </div>
+    <h1 class="main-title">VIVE LA CALLE</h1>
+    <h2 class="sub-title">717</h2>
+    <section  class="destacados" >
+        <img src="{% static 'img/ESPEJO.jpg' %}" alt="" style="float: left; width: 400px; ">
+        <h2>RECOMENDADO</h2>                                                                                                                                                                                         
+        <div class="product-grid">
+            {% for p in data %}    
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="{{ p.foto.url }}" alt="{{ p.nombre }}">
+                    <div class="product-overlay">
+                        <div class="product-actions">
+                            <button class="action-btn favorite-btn" onclick="toggleFavorite('{{ p.id }}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
+                            <a href="{% url 'detalles' p.id %}" class="action-btn view-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </a>
+                            
+                            
+                        </div>
+                        {% if p.cantidad == 0 %}
+                            <a href="{% url 'detalles' p.id %}"><button class="cart-btn">Agotado</button></a>                         
+                        {% else %}
+                            <a href="{% url 'detalles' p.id %}"><button class="cart-btn" onclick="addToCart('{{ p.id }}')">Añadir al carrito</button></a>       
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>{{ p.nombre }}</h3>
+                    <p class="price">${{ p.precio|intcomma }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block js %}
+<script>
+    lucide.createIcons();
+    
+
+    function viewDetails(productId) {
+        window.location.href = `/producto/${productId}/`;
+    }
+
+   
+    
+    function toggleFavorite(productId) {
+    fetch(`/agregar_a_favoritos/${productId}/`, {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'added') {
+            alert('Producto añadido a favoritos');
+        } else if (data.status === 'exists') {
+            alert('Este producto ya está en favoritos');
+        } else {
+            alert('Error al agregar a favoritos');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+
+    
+</script>
+{% endblock %}

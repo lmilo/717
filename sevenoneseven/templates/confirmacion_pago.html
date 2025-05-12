@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/contacto.css' %}">
+{% endblock %}
+{% block titulo %}Confirmacion Pago{% endblock %}
+
+{% block cuerpo %}
+{% if messages  %}
+    {% for message in messages %}
+        <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert" style="text-align: left; list-style: none;">
+            <li>{{ message }}</li>  
+        </ul>
+    {% endfor %}
+{% endif %}
+    <div class="container py-5">
+        <div class="card-pago bg-dark text-light p-3">
+            <h2 class="text-center mb-4">Confirmación de Pago</h2>
+            <h4 class="mb-3">¡Gracias por tu compra, {{ datos_pago.nombre }}{{ datos_pago.apellido }}!</h4>
+            <ul class="list-unstyled mb-4">
+                <li><strong>Email:</strong> {{ datos_pago.email }}</li>
+                <li><strong>Dirección:</strong> {{ datos_pago.direccion }}</li>
+                <li><strong>Método de Pago:</strong> {{ datos_pago.medio_pago }}</li>
+                <li><strong>Total Pagado:</strong> ${{ datos_pago.total }}</li>
+            </ul>
+
+            <h5 class="mb-3">Productos Comprados:</h5>
+            <div class="table-responsive">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Talla</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in datos_pago.productos %}
+                        <tr>
+                            <td>{{ producto.nombre }}</td>
+                            <td>{{ producto.talla }}</td>
+                            <td>{{ producto.cantidad }}</td>
+                            <td>${{ producto.subtotal }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex flex-column flex-md-row justify-content-between mt-4">
+                <a href="{% url 'factura_pdf' %}" class="btn btn-outline-secondary mb-2 mb-md-0">
+                    📄 Descargar Factura en PDF
+                </a>
+                <a href="{% url 'enviar_factura' %}" class="btn btn-success mb-2 mb-md-0">
+                    📩 Enviar Factura al Correo
+                </a>
+                <a href="{% url 'inicio' %}" class="btn btn-primary">
+                    🏬 Volver a la Tienda
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script>
+    lucide.createIcons();
+</script>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,164 @@
+{% load static %}
+
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Checkout - 717 Tienda Online</title>
+</head>
+<body class="body">
+    <header>
+        <div class="logo">
+            <img src="{% static 'img/717logo.png' %}" alt="Logo" width="50" height="50">
+        </div>
+    </header>
+    
+    <a href='{% url "inicio" %}' class="back-button">
+        <i data-lucide="arrow-left"></i> Volver
+    </a>
+    {% if messages  %}
+            {% for message in messages %}
+                <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert" style="text-align: left; list-style: none;">
+                    <li>{{ message }}</li>  
+                </ul>
+            {% endfor %}
+    {% endif %}
+    <main class="checkout-container">
+        <h1>717</h1>
+        
+        <div class="checkout-grid">
+            <!-- Resumen de Compra -->
+            <div class="order-summary">
+                <h2><i data-lucide="shopping-bag"></i> Resumen de Compra</h2>
+                <div class="summary-content">
+                    <div id="product-list" class="product-list">
+                        {% for item in carrito_items %}
+                        <div class="product-item">
+                            <img src="{{ item.foto }}" alt="{{ item.nombre }}" class="product-img">
+                            <div class="product-info">
+                                <span class="product-name">{{ item.nombre }}</span><br>
+                                <span>Talla: {{ item.talla }}</span><br>
+                                <span>Cantidad: {{ item.cantidad }}</span><br>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p>Tu carrito está vacío.</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="price-summary">
+                        <div class="subtotal">
+                            <span>Subtotal</span>
+                            <span id="subtotal">${{ total|intcomma }}</span>
+                        </div>
+                        <div class="shipping">
+                            <span>Envío</span>
+                            <span id="shipping-cost">$10.000</span>
+                            <small>Envío entre (5-7 días hábiles)</small>
+                        </div>
+                        <div class="total">
+                            <span>Total</span>
+                            <span id="total">${{ total|add:10000|intcomma }}</span>  <!-- Total con envío -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de Pago -->
+            <div class="checkout-form">
+                <h2>Iniciar Compra</h2>
+                
+                {% if request.session.auth %}
+                <form id="payment-form" method="post" action="{% url 'procesar_pago' %}">
+                    {% csrf_token %}
+                    
+                    <!-- Información de Envío -->
+                    <div class="form-section">
+                        <h3>Información de Envío</h3>
+                        <div class="form-group">
+                            <input type="email" value="{{ request.session.auth.correo }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" value="{{ request.session.auth.nombre }} {{ request.session.auth.apellido }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" value="{{ request.session.auth.direccion }}" disabled>
+                        </div>
+
+                    </div>
+
+                    <!-- Métodos de Pago -->
+                    <div class="form-section">
+                        <h3>Método de Pago</h3>
+                        <div class="payment-methods">
+                            <label>
+                                <input type="radio" name="medio_pago" value="2" checked onclick="togglePaymentFields('credito')">
+                                <span>Tarjeta Crédito</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="medio_pago" value="3" onclick="togglePaymentFields('debito')">
+                                <span>Tarjeta Débito</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="medio_pago" value="1" onclick="togglePaymentFields('pse')">
+                                <span>PSE</span>
+                            </label>
+                        </div>
+                        
+                        <div id="tarjeta-credito" class="payment-details">
+                            <h4>Datos de Tarjeta Crédito</h4>
+                            <div class="form-group">
+                                <input type="text" id="card-number" name="card-number" placeholder="Número de Tarjeta" >
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="card-expiry" name="card-expiry" placeholder="MM/YY" >
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="card-cvc" name="card-cvc" placeholder="CVC" >
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="tarjeta-debito" class="payment-details" style="display: none;">
+                            <h4>Datos de Tarjeta Débito</h4>
+                            <div class="form-group">
+                                <input type="text" id="debito-card-number" name="debito-card-number" placeholder="Número de Tarjeta" >
+                            </div>
+                        </div>
+
+                        <div id="pse" class="payment-details" style="display: none;">
+                            <h4>Pago con PSE</h4>
+                            <div class="form-group">
+                                <input type="text" id="pse-bank" name="pse-bank" placeholder="Banco" >
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="pay-button">Pagar</button>
+                </form>
+                {% else %}
+                <p>Debes iniciar sesión para realizar la compra.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+    
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        lucide.createIcons();
+        
+        function togglePaymentFields(type) {
+            document.getElementById('tarjeta-credito').style.display = (type === 'credito') ? 'block' : 'none';
+            document.getElementById('tarjeta-debito').style.display = (type === 'debito') ? 'block' : 'none';
+            document.getElementById('pse').style.display = (type === 'pse') ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block titulo %}Carrito{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    
+{% endblock %}
+{% block cuerpo %}
+<main class="container">
+    <h1 class="cart-title">Carrito de Compras</h1>
+
+    {% if carrito_items %}
+        <div class="cart-container">
+            <div class="cart-header">
+                <a href="javascript:confirmarEliminarTodos('{% url 'vaciar_carrito' %}')" class="empty-cart-btn">Vaciar Carrito</a>
+            </div>
+
+            <div class="cart-items">
+                {% for item in carrito_items %}
+                    <div class="cart-item">
+                        <img src="{{ item.foto }}" alt="{{ item.nombre }}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <h3>{{ item.nombre }}</h3>
+                            <p class="cart-price">${{ item.precio|intcomma }}</p>
+                            <p class="cart-size">Talla: {{ item.talla }}</p>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <a href="{% url 'actualizar_cantidad' item.id item.talla 'decrementar' %}" class="qty-btn">-</a>
+                            <span class="qty-value">{{ item.cantidad }}</span>
+                            <a href="{% url 'actualizar_cantidad' item.id item.talla 'incrementar' %}" class="qty-btn">+</a>
+                        </div>
+                        <a href="javascript:confirmarEliminar('{% url 'eliminar_del_carrito' item.id item.talla %}')" class="cart-remove-btn">🗑</a>
+
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="cart-summary">
+                <p class="cart-total">Total: <span>${{ total }}</span></p>
+                {% if request.session.auth %}
+                    <a href="{% url 'procesar_pago' %}" class="cart-checkout-btn">Proceder al Pago</a>
+                {% else %}
+                    <p class="login-warning">Debes iniciar sesión para proceder al pago.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <p class="cart-empty">No hay productos en el carrito.</p>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block js %}
+<script>
+    lucide.createIcons();
+
+    function confirmarEliminar(url) {
+        if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+            window.location.href = url;
+        }
+    }
+
+    function confirmarEliminarTodos(url) {
+        if (confirm("¿Estás seguro de que deseas vaciar todo el carrito?")) {
+            window.location.href = url;
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/contacto.css' %}">
+{% endblock %}
+
+{% block titulo %}Contacto{% endblock %}
+
+{% block cuerpo %}
+<main class="container">
+    <section class="contacto">
+        <h1>Contáctanos</h1>
+        <p>¿Tienes alguna pregunta o necesitas ayuda? Estamos aquí para ti.</p>
+
+        {% if messages  %}
+                {% for message in messages %}
+                    <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert" style="text-align: left; list-style: none;">
+                        <li>{{ message }}</li>  
+                    </ul>
+                {% endfor %}
+        {% endif %}
+        
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="info-item">
+                    <i data-lucide="map-pin"></i>
+                    <p>Cr 65C #70 A Sur 15 - San Antonio De Prado</p>
+                </div>
+                <div class="info-item">
+                    <i data-lucide="phone"></i>
+                    <p>+57 48 980 450</p>
+                </div>
+                <div class="info-item">
+                    <i data-lucide="mail"></i>
+                    <p>717days@gmail.com</p>
+                </div>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/717.__" target="_blank"><i data-lucide="instagram"></i></a>
+                    <a href="https://www.instagram.com/717.__" target="_blank"><i data-lucide="facebook"></i></a>
+                    <a href="https://www.instagram.com/717.__" target="_blank"><i data-lucide="twitter"></i></a>
+                </div>
+            </div>
+            <form action="{% url 'contacto' %}" method="post" class="contact-form">
+                {% csrf_token %}
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombre" value="{{ request.session.auth.nombre }} {{ request.session.auth.apellido }}" name="txtNombre" {% if request.session.auth %}readonly{% endif %} required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" value="{{ request.session.auth.correo }}" name="txtEmail" {% if request.session.auth %}readonly{% endif %} required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" name="txtMensaje" rows="5" required></textarea>
+                    </div>
+                    <button type="submit">Enviar mensaje</button>
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block js %}
+<script>
+    lucide.createIcons();
+</script>
+{% endblock %}

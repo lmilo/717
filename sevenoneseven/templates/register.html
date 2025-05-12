@@ -1,0 +1,139 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <title>{% if data %} Editar {% else %} Registro {% endif %} - 717 Tienda Online</title>
+    
+</head>
+<body class="register-page">
+    <div class="register-container">
+        <a href='{% url "inicio" %}' class="back-button">
+            <i data-lucide="arrow-left"></i> Volver
+        </a>
+        <div class="text-center">
+            <img src="{% static 'img/717logo.png' %}" alt="717 Logo" width="90" height="90">
+        </div>
+        <div class="text-center">
+            <h2>717</h2>
+            <h3>MI CUENTA</h3>
+        </div>
+        
+        <div class="register-box">
+            {% if data %}
+            {% else %}
+            <div class="register-nav">
+                <a href='{% url "login" %}'>INICIAR SESIÓN</a>
+                <span class="active">REGISTRATE</span>
+            </div>
+            {% endif %}
+
+{% if messages  %}
+        {% for message in messages %}
+            <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert" style="text-align: left; list-style: none;">
+                <li>{{ message }}</li>  
+            </ul>
+        {% endfor %}
+{% endif %}
+        
+            <form method="post" class="register-form">
+                {% csrf_token %}
+                {% if data %}
+                    <h1>Editar usuarios</h1>
+                {% else %}
+                    <h1>Registrarse</h1>
+                {% endif %}
+                
+                <div style="display: flex; gap: 20px;">
+                    <!-- Columna Izquierda -->
+                    <div style="flex: 1;">
+                        <label>Nombre:</label>
+                        <input type="text" value="{% if data %}{{data.nombre}}{% else %}{{request.session.datos.nombre}}{% endif %}" name="nombre" placeholder="Nombre" class="register-input" required>
+
+                        <label>Email:</label>
+                        <input type="text" value="{% if data %}{{data.correo}}{% else %}{{request.session.datos.correo}}{% endif %}" name="correo" placeholder="Email" class="register-input" required>
+
+                        <label>Teléfono:</label>
+                        <input type="text" value="{% if data %}{{data.telefono}}{% else %}{{request.session.datos.telefono}}{% endif %}" name="telefono" placeholder="Telefono" class="register-input" required>
+
+                        <label>Fecha de Nacimiento:</label>
+                        <input type="date" value="{% if data %}{{data.fecha_nac}}{% else %}{{request.session.datos.fecha_nac}}{% endif %}" name="fecha_nac" id="birth_date" class="register-input" required>
+
+                        <label class="{% if data %}d-none{% else %}d-block{% endif %}" >Contraseña:</label>
+                        <input type="password" value="{{data.password}}" name="password" placeholder="Contraseña" class="register-input {% if data %}d-none{% else %}d-block{% endif %}" required>
+                    </div>
+
+                    <!-- Columna Derecha -->
+                    <div style="flex: 1;">
+                        <label>Apellido:</label>
+                        <input type="text" value="{% if data %}{{data.apellido}}{% else %}{{request.session.datos.apellido}}{% endif %}" name="apellido" placeholder="Apellido" class="register-input" required>
+
+                        <label>Cédula:</label>
+                        <input type="text" value="{% if data %}{{data.cedula}}{% else %}{{request.session.datos.cedula}}{% endif %}" name="cedula" placeholder="Cédula" class="register-input" required>
+
+                        <label>Dirección:</label>
+                        <input type="text" value="{% if data %}{{data.direccion}}{% else %}{{request.session.datos.direccion}}{% endif %}" name="direccion" placeholder="Dirección" class="register-input" required>
+
+                        <label>Género:</label>
+                        <select name="genero" class="register-input" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            <option value="1" {% if data.genero == 1 %} selected=""{% endif %}>Masculino</option>
+                            <option value="2" {% if data.genero == 2 %} selected=""{% endif %}>Femenino</option>
+                            <option value="3" {% if data.genero == 3 %} selected=""{% endif %}>Otro</option>
+                        </select>
+
+                            <label class="{% if data %}d-none{% else %}d-block{% endif %}">Confirmar Contraseña:</label>
+                            <input type="password" value="{{data.password}}" name="confirm_password" placeholder="Confirmar Contraseña" class="register-input {% if data %}d-none{% else %}d-block{% endif %}" required>
+                    </div>
+                </div>
+
+                <label class="{% if data %}d-block{% else %}d-none{% endif %}">Rol:</label>
+                <select name="rol" class="form-select register-input {% if data %}d-block{% else %}d-none{% endif %}">
+                    <option value="">Seleccione</option>
+                    <option value="1" {% if data.rol == 1 %}selected ="" {% endif %}>Admin</option>
+                    <option value="2" {% if data.rol == 2 %}selected ="" {% endif %}>Empleado</option>
+                    <option value="3" {% if data.rol == 3 %}selected ="" {% endif %}>Cliente</option>
+                </select>
+
+                <br>
+                <button type="submit" class="btn btn-{% if data %}info{% else %}success{% endif %}">{% if data %}Actualizar{% else%}Registrarse{% endif %}</button>
+
+                <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+            
+                <div class="privacy-notice">
+                    Es posible que las personas que usen nuestro servicio hayan subido tu información de contacto a 717.
+                    <a href='{% url "legal" %}' class="privacy-link">Más información</a>
+                </div>
+                
+                
+            </form>
+       
+                  
+        </div>
+
+        <div class="text-center">
+            <img src="{% static 'img/717logo.png' %}" alt="717 Logo" width="60" height="60" class="bottom-logo">
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", function () {
+            let today = new Date();
+            today.setDate(today.getDate() - 1); // Resta un día para que no se pueda elegir hoy
+            let maxDate = today.toISOString().split("T")[0]; // Convierte la fecha a formato YYYY-MM-DD
+            document.getElementById("birth_date").setAttribute("max", maxDate);
+        });
+    
+    </script>
+</body>
+</html>
