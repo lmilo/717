@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/productos.css' %}">
+{% endblock %}
+
+{% block titulo %}Productos{% endblock %}
+
+{% block cuerpo %}
+<main class="container">
+    <section id="productos" class="productos">
+        <div class="filter-container">
+            <form method="GET" action="{% url 'productos' %}"  class="filter-form">
+                <div class="col-md-3 filtro">
+                    <label for="color" class="form-label">Color</label>
+                    <select name="color" id="color" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="ROJO">ROJO</option>
+                        <option value="GRIS">GRIS</option>
+                        <option value="NEGRO">NEGRO</option>
+                        <option value="BLANCO">BLANCO</option>
+                        <option value="BEIGE">BEIGE</option>
+                        <option value="AZUL">AZUL</option>
+
+                    </select>
+                </div>
+                <div class="col-md-3 filtro">
+                    <label for="tipo" class="form-label">Tipo</label>
+                    <select name="tipo" id="tipo" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="1">Camiseta</option>
+                        <option value="2">Pantalón</option>
+                        <option value="3">Gorra</option>
+                        <option value="4">Accesorio</option>
+                    </select>
+                </div>
+                <div class="col-md-3 filtro">
+                    <label for="precio_orden" class="form-label">Ordenar por Precio</label>
+                    <select name="precio_orden" id="precio_orden" class="form-select">
+                        <option value="">Sin orden</option>
+                        <option value="menor">Menor Precio</option>
+                        <option value="mayor">Mayor Precio</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </form>
+        </div>
+
+        <h2>Nuestros Productos</h2>
+        <div class="product-grid" id="product-grid">
+            {% for p in data%}
+                
+            <div class="product-card">
+                
+                    <div class="product-image">
+                        <img src="{{ p.foto.url }}" alt="{{ p.nombre }}">
+                   
+                        
+                        <div class="product-overlay">
+                        
+                            <div class="product-actions">
+                                <button class="action-btn favorite-btn" onclick="toggleFavorite('{{ p.id }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </button>
+                                <a href="{% url 'detalles' p.id %}" class="action-btn view-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </a>
+                                                                
+                            </div>
+                            {% if p.cantidad == 0 %}
+                                <a href="{% url 'detalles' p.id %}"><button class="cart-btn">Agotado</button></a>                         
+                            {% else %}
+                                <a href="{% url 'detalles' p.id %}"><button class="cart-btn" onclick="addToCart('{{ p.id }}')">Añadir al carrito</button></a>       
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>{{ p.nombre }}</h3>
+                        <p class="price">${{ p.precio|intcomma}}</p>
+                    </div>
+                
+            </div>
+            
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block js %}
+<script>
+    lucide.createIcons();
+    
+
+    function viewDetails(productId) {
+        window.location.href = `/producto/${productId}/`;
+    }
+
+   
+    
+    function toggleFavorite(productId) {
+    fetch(`/agregar_a_favoritos/${productId}/`, {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'added') {
+            alert('Producto añadido a favoritos');
+        } else if (data.status === 'exists') {
+            alert('Este producto ya está en favoritos');
+        } else {
+            alert('Error al agregar a favoritos');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+{% endblock %}

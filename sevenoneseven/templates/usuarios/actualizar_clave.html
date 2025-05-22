@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Actualizar contraseña - 717</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <a href="{% url 'inicio' %}" class="back-button">
+            <i data-lucide="arrow-left"></i> Volver
+        </a>
+        <div class="text-center">
+            <img src="{% static 'img/717logo.png' %}" alt="717 Logo" width="90" height="90">
+        </div>
+        <div class="text-center">
+            <h2>717</h2>
+            <h3>ACTUALIZAR CONTRASEÑA</h3>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" style="text-align: left; list-style: none;">
+                    <li>{{ message }}</li>
+                </ul>
+            {% endfor %}
+        {% endif %}
+
+        <div class="login-box">
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                <label>Nueva contraseña:</label>
+                <input type="password" name="password" required>
+
+                <label>Confirmar contraseña:</label>
+                <input type="password" name="confirmar" required>
+
+                <button type="submit">Actualizar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

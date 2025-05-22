@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}Detalle Venta{% endblock %}
+{% block css %}
+<!-- Bootstrap y DataTables CSS -->
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+<style>
+    .btn-dark {
+        background-color: #343a40 !important;
+        color: white !important;
+        border: none;
+    }
+
+    #buttons-container {
+        margin-bottom: 10px;
+        text-align: right;
+    }
+    
+</style>
+{% endblock %}
+
+{% block cuerpo %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalles Ventas</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" style="text-align: left; list-style: none;">
+                <li>{{ message }}</li>
+            </ul>
+        {% endfor %}
+    {% endif %}
+    <a href='{% url "ventas" %}' class="back-button">
+        <i data-lucide="arrow-left"></i> Volver
+    </a>
+
+    <table id="ventasTable" class="display nowrap table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Producto</th>
+                <th>Foto</th>
+                <th>Talla</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in venta %}
+            <tr>
+                <td>{{ v.factura.cliente.nombre }}</td>
+                <td>{{ v.precioProducto.nombre }}</td>
+                <td><img src="{{ v.precioProducto.foto.url }}" alt="{{ v.precioProducto.foto }}" style="width: 100px;"></td>
+                <td>{{ v.talla }}</td>
+                <td>{{ v.cantidad }}</td>
+                <td>${{ v.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3">Total:</th>
+                <th>${{ total }}</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}
+
+{% block js %}
+<!-- jQuery y DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    $(document).ready(function () {
+        let table = $('#ventasTable').DataTable({
+            responsive: true,
+            scrollX: true,
+            autoWidth: false,
+            dom: "Bfrtip",
+            buttons: [
+                { extend: 'copy', text: 'Copiar', className: 'btn btn-dark' },
+                { extend: 'excel', text: 'Excel', className: 'btn btn-dark' },
+                { extend: 'csv', text: 'CSV', className: 'btn btn-dark' },
+                { extend: 'pdf', text: 'PDF', className: 'btn btn-dark' },
+                { extend: 'print', text: 'Imprimir', className: 'btn btn-dark' }
+            ],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+            }
+        });
+        
+        table.buttons().container().appendTo('#buttons-container');
+    });
+    
+        lucide.createIcons();
+    
+</script>
+{% endblock %}
+
+
+
+

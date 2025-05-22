@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block titulo %}Detalle Pedido{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
+{% block cuerpo %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalles del Pedido #{{ pedido.id }}</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" style="text-align: left; list-style: none;">
+                <li>{{ message }}</li>
+            </ul>
+        {% endfor %}
+    {% endif %}
+    
+    <a href='{% url "pedidos" %}' class="btn btn-dark btn-sm">Volver a Mis Pedidos</a>
+
+    <h3 class="mt-4">Datos del Pedido</h3>
+    <div class="mb-3">
+        <a href="{% url 'descargar_factura_pdf' pedido.id %}" class="btn btn-outline-secondary mb-2 mb-md-0">
+            📄 Descargar PDF
+        </a>
+        <a href="{% url 'enviar_factura_pdf' pedido.id %}" class="btn btn-success mb-2 mb-md-0">
+            📩 Enviar por Correo
+        </a>
+    </div>
+    <table class="tabla">
+        <tr>
+            <th>Cliente:</th>
+            <td>{{ pedido.cliente.nombre }}</td>
+        </tr>
+        <tr>
+            <th>Correo:</th>
+            <td>{{ pedido.cliente.correo }}</td>
+        </tr>
+        <tr>
+            <th>Fecha:</th>
+            <td>{{ pedido.fecha }}</td>
+        </tr>
+        <tr>
+            <th>Total:</th>
+            <td>${{ pedido.total|intcomma }}</td>
+        </tr>
+    </table>
+
+    <h3 class="mt-4">Productos del Pedido</h3>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Foto</th>
+                <th>Talla</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr>
+                <td>{{ p.precioProducto.nombre|intcomma }}</td>
+                <td><img src="{{ p.precioProducto.foto.url }}" alt="{{ p.precioProducto.foto }}" style="width: 100px;"></td>
+                <td>{{ p.talla }}</td>
+                <td>{{ p.cantidad }}</td>
+                <td>${{ p.subtotal|intcomma }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <th colspan="4">Total:</th>
+                <th>${{ total|intcomma }}</th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+    {% if not productos %}
+        <div class="empty-state">
+            <p>No hay productos en este pedido.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

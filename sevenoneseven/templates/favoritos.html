@@ -1,0 +1,144 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos - 717</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="body">
+    <header>
+        <div class="logo">
+            <img src="{% static 'img/717logo.png' %}" alt="717" width="50">
+        </div>
+        <nav>
+            <ul>
+                <li><a href='{% url "inicio" %}'>INICIO</a></li>
+                <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="account-container">
+        <nav class="account-nav">
+            <a href='{% url "perfil" %}'>Mi Perfil</a>
+            <a href='{% url "pedidos" %}'>Mis Pedidos</a>
+            <a href='{% url "favoritos" %}' class="active">Mis Favoritos</a>
+        </nav>
+
+        <div class="favorites-content">
+            <h1>717</h1>
+            <h2>Mis Favoritos</h2>
+            
+            {% if productos %}
+                <div class="product-grid">
+                    {% for p in productos %}
+                    <div class="product-card" id="product-{{ p.id }}">
+                        <div class="product-image">
+                            <img src="{{ p.foto.url }}" alt="{{ p.nombre }}">
+                            <div class="product-overlay">
+                                <div class="product-actions">
+                                    <a href="{% url 'detalles' p.id %}" class="action-btn view-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'detalles' p.id %}"><button class="cart-btn" onclick="addToCart('{{ p.id }}')">Añadir al carrito</button></a>
+                        <div class="product-info">
+                            <h3>{{ p.nombre }}</h3>
+                            <p class="price">${{ p.precio|intcomma }}</p>
+                        </div>
+                        <button class="remove-favorite-btn" onclick="removeFavorite('{{ p.id }}')">Eliminar</button>
+
+
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Actualmente no tienes favoritos</p>
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+        
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        function removeFavorite(productId) {
+    fetch(`/eliminar_de_favoritos/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'removed') {
+            const productDiv = document.getElementById(`product-${productId}`);
+            if (productDiv) {
+                productDiv.remove();
+            }
+            alert('Producto eliminado de favoritos');
+        } else if (data.status === 'unauthenticated') {
+            alert('Debes iniciar sesión para eliminar favoritos');
+        } else {
+            alert('Error al eliminar de favoritos');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+        function addToCart(productId) {
+            fetch(`/agregar_al_carrito/${productId}/`, { method: 'GET' })
+            .then(() => { alert('Producto añadido al carrito'); });
+        }
+        
+        function removeFavorite(productId) {
+    fetch(`/eliminar_de_favoritos/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'removed') {
+            document.getElementById(`product-${productId}`).remove();
+            alert('Producto eliminado de favoritos');
+        } else {
+            alert(data.message || 'Error al eliminar de favoritos');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+    </script>
+</body>
+</html>

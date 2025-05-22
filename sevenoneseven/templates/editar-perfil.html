@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - 717</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="body">
+    <header>
+        <div class="text-center">
+            <img src="{% static 'img/717logo.png' %}" alt="717 Logo" width="90" height="90">
+        </div>
+        <nav>
+            <ul>
+                <li><a href='{% url "inicio" %}'>INICIO</a></li>
+                {% if request.session.auth %}
+                        {% if request.session.auth.rol != 3 %}
+                            <li><a href='{% url "listar_productos" %}'>PRODUCTOS</a></li>
+                            <li><a href='{% url "listar_usuarios" %}'>USUARIOS</a></li>
+                            <li><a href='{% url "ventas" %}'>VENTAS</a></li>
+                        {% else %}
+                            <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                            <li><a href='{% url "contacto" %}'>CONTACTO</a></li> 
+                        {% endif %}   
+                {% else %}
+                    <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                    <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main class="account-container">
+        <nav class="account-nav">
+            <a href='{% url "perfil" %}' class="active">Mi Perfil</a>
+            {% if request.session.auth %}
+                    {% if request.session.auth.rol != 1 %}
+                        <a href='{% url "pedidos" %}' >Mis Pedidos</a>
+                        <a href='{% url "favoritos" %}'>Mis Favoritos</a>
+               
+                    {% endif %}
+            {% else %}
+            {% endif %}
+                    
+        </nav>
+
+        <div class="edit-profile-content">
+            <h1>717</h1>
+            <h2>EDITAR PERFIL</h2>
+            
+                <form class="edit-form" method="post">
+                    {% if request.session.auth %}
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombre" name="nombre" value="{{ request.session.auth.nombre }}" required>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" id="apellido" name="apellido" value="{{ request.session.auth.apellido }}" required>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="correo">Email</label>
+                        <input type="email" id="correo" name="correo" value="{{ request.session.auth.correo }}" required>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="text" id="telefono" name="telefono" value="{{ request.session.auth.telefono }}" required>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" id="direccion" name="direccion" value="{{ request.session.auth.direccion }}" required>
+                    </div>
+                    <a href='{% url "cambiar_clave" %}' style="color: white;">Cambiar Contraseña</a>
+                    <button type="submit" class="guardar">Guardar Cambios</button>
+                    {% else %}
+                        <p>No hay sesión</p>
+                    {% endif %}
+                </form>
+        </div>
+    </main>
+
+    <script src="../script.js"></script>
+    <script>
+        lucide.createIcons();       
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,254 @@
+.login-page {
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+}
+
+.login-container h2 {
+    font-size: 2.5rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.login-container h3 {
+    font-size: 1.5rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-box {
+    background-color: #13131800;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.login-nav span,
+.login-nav a {
+    padding: 0.5rem 1rem;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.login-nav .active {
+    border-bottom: 2px solid #422323;
+}
+
+.login-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.login-form label {
+    display: block;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #1a1c1f;
+    border: 1px solid #4b5563;
+    border-radius: 5px;
+    color: white;
+}
+
+.login-form button {
+    width: 108%;
+    padding: 0.75rem;
+    background-color: #422323;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+.login-form button:hover {
+    background-color: #000000;
+}
+
+.captcha {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.captcha input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+.captcha label {
+    color: white;
+    font-size: 0.9rem;
+}
+
+.captcha-image {
+    width: 4rem;
+    height: 2rem;
+    background-color: #1a1c1f;
+    margin-left: auto;
+}
+
+.login-container .text-center {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: opacity 0.3s ease;
+}
+
+.back-button:hover {
+    opacity: 0.8;
+}
+
+.back-button i {
+    margin-right: 5px;
+}
+
+.forgot-password {
+    display: block;
+    text-align: left;
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: white;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.modal-content h2 {
+    color: black;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.modal-content .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: black;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+}
+
+.modal-content button[type="submit"] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #333;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: black;
+}
+
+.modal-close:hover {
+    color: #666;
+}
+
+.google-login {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.g-recaptcha {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+.small-link {
+    font-size: 0.9rem;
+    color: #007bff;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 5px;
+}
+.small-link:hover {
+    text-decoration: underline;
+}
+
+

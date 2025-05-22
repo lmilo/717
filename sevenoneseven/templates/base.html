@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    {% block css %}
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>717 - {% block titulo %}  {% endblock %}</title>
+</head>
+<body class="body">
+    <div class="content-wrapper">
+        <header>
+            <div class="logo">
+                <img src="{% static 'img/717logo.png' %}" alt="Logo" width="70" height="70">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href='{% url "inicio" %}'>INICIO</a></li>
+                    {% if request.session.auth %}
+                        {% if request.session.auth.rol != 3 %}
+                            <li><a href='{% url "listar_productos" %}'>PRODUCTOS</a></li>
+                            <li><a href='{% url "listar_usuarios" %}'>USUARIOS</a></li>
+                            <li><a href='{% url "ventas" %}'>VENTAS</a></li>
+                        {% else %}
+                            <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                            <li><a href='{% url "contacto" %}'>CONTACTO</a></li> 
+                        {% endif %}   
+                    {% else %}
+                        <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                        <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+                    {% endif %}
+                    
+                    
+                    {% if request.session.auth %}
+                        <li><a href='{% url "perfil" %}'>PERFIL</a></li>
+                    {% else %}
+                        <li><a href='{% url "login" %}'>INICIO DE SESIÓN</a></li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'cart' %}" class="cart-icon" style="position: relative; display: inline-block;">
+                            <i data-lucide="shopping-cart"></i>
+                            {% if request.session.carrito %}
+                                <span class="cart-count">{{ request.session.carrito|length }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        
+        <main>
+            {% block cuerpo %}
+            {% endblock %}
+        </main>
+        
+        <footer>
+            <div class="footer-grid">
+                <div>
+                    <h3>SÍGUENOS</h3>
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/717.___" target="_blank"><i data-lucide="instagram"></i></a>
+                        <a href="https://es-la.facebook.com/login/device-based/regular/login/" target="_blank"><i data-lucide="facebook"></i></a>
+                        <a href="https://x.com/?lang=es" target="_blank"><i data-lucide="twitter"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3>CATEGORÍAS</h3>
+                    <ul>
+                        <li><a href='{% url "inicio" %}'>INICIO</a></li>
+                        {% if request.session.auth %}
+                            {% if request.session.auth.rol != 3 %}
+                                <li><a href='{% url "listar_productos" %}'>PRODUCTOS</a></li>
+                                <li><a href='{% url "listar_usuarios" %}'>USUARIOS</a></li>
+                                <li><a href='{% url "ventas" %}'>VENTAS</a></li>
+                            {% else %}
+                                <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                                <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                            <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div>
+                    <h3>NAVEGACIÓN</h3>
+                    <ul>
+                        <li><a href='{% url "inicio" %}'>INICIO</a></li>
+                        {% if request.session.auth %}
+                            {% if request.session.auth.rol != 3 %}
+                                <li><a href='{% url "listar_productos" %}'>PRODUCTOS</a></li>
+                                <li><a href='{% url "listar_usuarios" %}'>USUARIOS</a></li>
+                                <li><a href='{% url "ventas" %}'>VENTAS</a></li>
+                            {% else %}
+                                <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                                <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
+                            <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+                        {% endif %}
+                        <li><a href='{% url "legal" %}'>LEGAL</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-logo">
+                <img src="{% static 'img/717logo.png'%}" alt="717 Logo" width="70" height="70">
+            </div>
+        </footer>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block js %}
+    {% endblock %}
+</body>
+
+</html>

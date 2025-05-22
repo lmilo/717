@@ -1,0 +1,86 @@
+
+{% load static %}
+
+
+
+{% block cuerpo %}
+
+    
+{% endblock %}
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    <title>Cambiar clave - 717</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="body">
+    <header>
+        <div class="logo">
+            <img src="{% static 'img/717logo.png' %}" alt="717" width="50">
+        </div>
+        
+            
+        </div>
+    </header>
+
+    <main class="account-container">
+
+        <div class="login-page">
+            <div class="login-container">
+                <a href='{% url "editar_perfil" %}' class="back-button">
+                    <i data-lucide="arrow-left"></i> Volver
+                </a>
+                <div class="text-center">
+                    <img src="{% static 'img/717logo.png' %}" alt="717 Logo" width="90" height="90">
+                </div>
+                <div class="text-center">
+                    <h2>717</h2>
+                    <h3>MI CUENTA</h3>
+                </div>
+                {% if messages  %}
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %} 
+                            <ul class="alert alert-danger" role="alert" style="text-align: left; list-style: none;">
+                                <li>{{ message }}</li>
+                            </ul>
+                        {% endif %} 
+                    {% endfor %}
+                {% endif %}
+                <div class="login-box">
+                    <form method="post" class="login-form">
+                        {% csrf_token %}
+                        <label>Contraseña Actual:</label>
+                        <input type="password" name="clave_actual" placeholder="contraseña actual" required>
+                        <label>Contraseña Nueva:</label>
+                        <input type="password" name="nueva" placeholder="contraseña nueva" required>
+                        <label>Confirmar Contraseña:</label>
+                        <input type="password" name="repite_nueva" placeholder="confirmar contraseña" required>
+                        <button type="submit">Cambiar Contraseña</button>
+                    </form>
+                </div>
+                
+        
+               
+            </div>
+        </div>
+    </main>
+
+    <script src="../script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}CRUD Usuarios{% endblock %}
+{% block css %}
+<!-- Bootstrap y DataTables CSS -->
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+<style>
+    .btn-dark {
+        background-color: #343a40 !important;
+        color: white !important;
+        border: none;
+    }
+    
+    #buttons-container {
+        margin-bottom: 10px;
+        text-align: right;
+    }
+</style>
+{% endblock %}
+
+{% block cuerpo %}
+{% if messages %}
+        {% for message in messages %}
+            {% if messages %}
+                {% for message in messages %}
+                    <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" style="text-align: left; list-style: none;">
+                        <li>{{ message }}</li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+{% endif %}
+<div class="container mt-4">
+    <h2 class="mb-4">Listado de Usuarios</h2>
+    
+    <div id="buttons-container"></div>
+    
+    <table id="usuariosTable" class="display nowrap table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>CÉDULA</th>
+                <th>NOMBRES</th>
+                <th>APELLIDOS</th>
+                <th>TELÉFONO</th>
+                <th>DIRECCIÓN</th>
+                <th>CORREO</th>
+                <th>GÉNERO</th>
+                <th>ROL</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in data %}
+            <tr>
+                <td>{{ u.cedula }}</td>
+                <td>{{ u.nombre }}</td>
+                <td>{{ u.apellido }}</td>
+                <td>{{ u.telefono }}</td>
+                <td>{{ u.direccion }}</td>
+                <td>{{ u.correo }}</td>
+                <td>{{ u.get_genero_display }}</td>
+                <td>{{ u.get_rol_display }}</td>
+                <td>
+                    {% if request.session.auth %}
+                        {% if request.session.auth.rol == 1 %}
+                            {% if u.get_rol_display == "Admin" %}
+                                <a href="{% url 'editar_usuario' u.id %}" class="btn btn-info btn-sm">Editar</a>
+                            {% else %}
+                                <a href="javascript:confirmar_eliminar('{% url 'eliminar_usuario' u.id %}');" class="btn btn-danger btn-sm">Eliminar</a>
+                                <a href="{% url 'editar_usuario' u.id %}" class="btn btn-info btn-sm">Editar</a>
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9" class="text-center">No hay usuarios registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let table = $('#usuariosTable').DataTable({
+            responsive: true,
+            scrollX: true,
+            autoWidth: false,
+            dom: "Bfrtip",
+            buttons: [
+                { extend: 'copy', text: 'Copiar', className: 'btn btn-dark' },
+                { extend: 'excel', text: 'Excel', className: 'btn btn-dark' },
+                { extend: 'csv', text: 'CSV', className: 'btn btn-dark' },
+                { extend: 'pdf', text: 'PDF', className: 'btn btn-dark' },
+                { extend: 'print', text: 'Imprimir', className: 'btn btn-dark' }
+            ],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+            }
+        });
+        
+        table.buttons().container().appendTo('#buttons-container');
+    });
+    
+        lucide.createIcons();
+    
+</script>
+{% endblock %}

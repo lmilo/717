@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
+{% block titulo %}Información Legal{% endblock %}
+{% block cuerpo %}
+    <main class="container">
+        <section class="legal-content">
+            <h1>717</h1>
+            <h2>INFORMACIÓN LEGAL</h2>
+
+            <div class="legal-container">
+                <div class="legal-section">
+                    <h3>Términos de Uso</h3>
+                    <div class="legal-text">
+                        <p>Bienvenido a 717. Al acceder y utilizar este sitio web, aceptas cumplir con los siguientes términos y condiciones. Nos reservamos el derecho de modificar estos términos en cualquier momento, por lo que te recomendamos revisarlos periódicamente.</p>
+                        
+                        <h4>Uso del Sitio</h4>
+                        <p>El contenido de este sitio es para uso personal y comercial. No puedes copiar, distribuir o modificar ningún material sin nuestro consentimiento previo.</p>
+                        
+                        <h4>Propiedad Intelectual</h4>
+                        <p>Todos los derechos de propiedad intelectual relacionados con este sitio, incluidos textos, gráficos, logotipos y software, son propiedad de 717 o sus licenciantes.</p>
+                        
+                        <h4>Limitación de Responsabilidad</h4>
+                        <p>717 no será responsable por daños directos o indirectos derivados del uso o la imposibilidad de uso de este sitio.</p>
+                    </div>
+                </div>
+
+                <div class="legal-section">
+                    <h3>Política de Privacidad</h3>
+                    <div class="legal-text">
+                        <p>En 717, nos comprometemos a proteger tu privacidad. Esta política describe cómo recopilamos, utilizamos y protegemos la información personal cuando utilizas nuestro sitio web.</p>
+                        
+                        <h4>Recopilación de Datos</h4>
+                        <p>Recopilamos información personal que nos proporcionas voluntariamente, como tu nombre y correo electrónico, cuando te registras o te pones en contacto con nosotros.</p>
+                        
+                        <h4>Uso de la Información</h4>
+                        <p>Utilizamos tu información para mejorar tu experiencia en nuestro sitio, responder a tus consultas y enviarte actualizaciones relevantes sobre nuestros servicios.</p>
+                        
+                        <h4>Protección de Datos</h4>
+                        <p>Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra el acceso no autorizado, la alteración o la divulgación.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+{% block js %}
+    <script>
+        lucide.createIcons();
+    </script>
+{% endblock %}

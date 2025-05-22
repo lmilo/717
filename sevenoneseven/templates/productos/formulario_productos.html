@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>{% if data %} Editar {% else %} Agregar {% endif %}- 717 Tienda Online</title>
+</head>
+<body class="register-page">
+    <div class="register-container">
+        
+        <a href='{% url "listar_productos" %}' class="back-button">
+            <i data-lucide="arrow-left"></i> Volver
+        </a>
+        <div class="logo">
+            <img src="{% static 'img/717logo.png' %}" alt="Logo" width="70" height="70" style="margin-left:190px;">
+        </div>
+        <div class="text-center">
+            <h2>717</h2>
+        </div>
+    
+        {% if messages %}
+            {% for message in messages %}
+                <ul class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" style="text-align: left; list-style: none;">
+                    <li>{{ message }}</li>
+                </ul>
+            {% endfor %}
+        {% endif %}
+        
+            <form method="post" enctype="multipart/form-data" class="register-form">
+                {% csrf_token %}
+                {% if data %}
+                    <h1>Editar</h1>
+                {% else %}
+                    <h1>Agregar</h1>
+                {% endif %}
+            
+                <div style="display: flex; gap: 20px;">
+                    <!-- Columna Izquierda -->
+                    <div style="flex: 1;">
+                        <label>Nombre:</label>
+                        <input type="text" value="{% if data %}{{data.nombre}}{% else %}{{request.session.datos.nombre}}{% endif %}" name="nombre" placeholder="Nombre" class="register-input" required>
+
+                        <label>Color:</label>
+                        <input type="text" value="{% if data %}{{data.color}}{% else %}{{request.session.datos.color}}{% endif %}" name="color" placeholder="Color" class="register-input" required oninput="this.value = this.value.toUpperCase()">
+
+                        <label>Descripción:</label>
+                        <input type="text" value="{% if data %}{{data.descripcion}}{% else %}{{request.session.datos.descripcion}}{% endif %}" name="descripcion" placeholder="Descripción" class="register-input" required>
+
+                        <label {% if data %}id="peso"{% else %}{% endif %}>Peso:</label>
+                        <input type="text" value="{% if data %}{{data.peso}}{% else %}{{request.session.datos.peso}}{% endif %}" name="peso" placeholder="Peso" class="register-input" required>
+
+                        <label>Tipo:</label>
+                        <select name="tipo" class="register-input" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            <option value="1" {% if data.tipo == 1 %} selected=""{% endif %}>Camiseta</option>
+                            <option value="2" {% if data.tipo == 2 %} selected=""{% endif %}>Pantalon</option>
+                            <option value="3" {% if data.tipo == 3 %} selected=""{% endif %}>Gorra</option>
+                            <option value="4" {% if data.tipo == 4 %} selected=""{% endif %}>Accesorio</option>
+                            <option value="5" {% if data.tipo == 5 %} selected=""{% endif %}>Polo</option>
+                        </select>
+                    </div>
+
+                    <!-- Columna Derecha -->
+                    <div style="flex: 1;">
+                        <label>Medida:</label>
+                        <input type="text" value="{% if data %}{{data.medida}}{% else %}{{request.session.datos.medida}}{% endif %}" name="medida" placeholder="Medida" class="register-input" required>
+
+                        <label>Precio:</label>
+                        <input type="text" value="{% if data %}{{data.precio}}{% else %}{{request.session.datos.precio}}{% endif %}" name="precio" placeholder="Precio" class="register-input" required>
+
+                        <label>Cantidad:</label>
+                        <input type="text" value="{% if data %}{{data.cantidad}}{% else %}{{request.session.datos.cantidad}}{% endif %}" name="cantidad" placeholder="Cantidad" class="register-input" required>
+
+                        <label>Foto:</label>
+                        {% if data.foto %}
+                        <div>
+                            <img src="{{ data.foto.url }}" alt="Imagen actual" style="width: 100px; height: 100px;">
+                            <p style="float: right;">Imagen Actual</p> 
+                            <input type="file" name="foto" accept="image/*" class="register-input">
+                        </div>
+                        {% else %}
+                        <input type="file" name="foto" accept="image/*" class="register-input" required>
+                        {% endif %}
+
+                        <label>Género:</label>
+                        <select name="gen" class="register-input" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            <option value="1" {% if data.gen == 1 %} selected=""{% endif %}>Masculino</option>
+                            <option value="2" {% if data.gen == 2 %} selected=""{% endif %}>Femenino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <br>
+                <button type="submit" class="btn btn-{% if data %}info{% else %}success{% endif %}">{% if data %}Actualizar producto{% else%}Agregar Producto{% endif %}</button>
+
+                <div class="privacy-notice">
+                    Es posible que las personas que usen nuestro servicio hayan subido tu información de contacto a 717.
+                    <a href='{% url "legal" %}' class="privacy-link">Más información</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", function () {
+            let today = new Date();
+            today.setDate(today.getDate() - 1); // Resta un día para que no se pueda elegir hoy
+            let maxDate = today.toISOString().split("T")[0]; // Convierte la fecha a formato YYYY-MM-DD
+            document.getElementById("birth_date").setAttribute("max", maxDate);
+        });
+    
+    </script>
+</body>
+</html>

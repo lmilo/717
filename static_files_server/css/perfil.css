@@ -1,0 +1,255 @@
+.account-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+.account-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.account-nav a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.account-nav a.active {
+    border-bottom: 2px solid #422323;
+}
+
+.user-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-icon {
+    color: white;
+    text-decoration: none;
+}
+
+.cerrar-sesion {
+    padding: 0.5rem 1rem;
+    background-color: rgb(134, 21, 21);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cerrar-sesion:hover {
+    background-color: #000000;
+}
+
+/* Profile Content */
+.profile-content,
+.orders-content,
+.favorites-content,
+.edit-profile-content {
+    background-color: #131318;
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 800px;
+    min-width: 300px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #9ca3af;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-group label {
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.info-group p {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.edit-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #422323;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #000000;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.empty-state p {
+    color: #9ca3af;
+    margin-bottom: 2rem;
+}
+
+.details-section {
+    margin-top: 3rem;
+    text-align: left;
+}
+
+.details-section h3 {
+    color: #9ca3af;
+    margin-bottom: 1rem;
+}
+
+.details-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.details-grid p {
+    color: white;
+}
+
+/* Edit Profile Form */
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.form-group label {
+    width: 150px;
+    color: #9ca3af;
+}
+
+.form-group input {
+    flex: 1;
+    padding: 0.75rem;
+    background-color: #1a1c1f;
+    border: 1px solid #3a3a3a;
+    color: white;
+    border-radius: 4px;
+}
+
+.editar {
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: 1px solid #422323;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.editar:hover {
+    background-color: #422323;
+}
+
+.guardar {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #422323;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.guardar:hover {
+    background-color: #000000;
+}
+
+@media (max-width: 768px) {
+    .account-nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .form-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-group label {
+        width: auto;
+        margin-bottom: 0.5rem;
+    }
+
+    .editar {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}
+
+.simple-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: white;
+}
+
+.simple-table th, .simple-table td {
+    border-bottom: 1px solid #555;
+    padding: 10px 15px;
+    text-align: left;
+}
+
+.simple-table th {
+    background-color: #1e1e1e;
+    font-weight: bold;
+}
+
+.simple-table tr:hover {
+    background-color: #2a2a2a;
+}
+
+.simple-table a {
+    color: #7f5af0;
+    text-decoration: none;
+}
+
+.simple-table a:hover {
+    text-decoration: underline;
+}
+
