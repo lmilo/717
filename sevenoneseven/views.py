@@ -1656,8 +1656,8 @@ def backup(request):
         print("...")
 
         # 6. Enviar por correo
-        subject = "Spa SENA - Backup"
-        body = "Copia de seguridad del proyecto Spa SENA (media, static_files_server y base de datos)"
+        subject = "717 Store - Backup"
+        body = "Copia de seguridad del proyecto 717 Store (media, static_files_server y base de datos)"
         to_emails = ['717days@gmail.com']
 
         if os.path.exists(final_zip):
