@@ -654,6 +654,12 @@ def editar_usuario(request, id_usuario):
                         messages.error(request, "Este correo ya está en uso por otro usuario.")
                         return redirect("editar_perfil", id_usuario=id_usuario)
                     
+                    try:
+                        validate_email(u.correo)
+                    except ValidationError:
+                        messages.error(request, "El correo electrónico no tiene un formato válido.")
+                        return redirect("editar_perfil", id_usuario=id_usuario)
+                    
                     u.genero = request.POST.get("genero")
                     u.rol = request.POST.get("rol")
                     u.save()
